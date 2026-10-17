@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FaceFilter AI — Real-Time Face Filters</title>
+  <meta name="description" content="Apply stunning real-time AI face filters to your webcam feed. Dog, sunglasses, crown, rainbow, neon, vintage, cyberpunk, sketch, pixelate and mirror effects." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <!-- ── Ambient background blobs ── -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <div class="logo">
+      <span class="logo-icon">✦</span>
+      <span class="logo-text">FaceFilter <span class="accent">AI</span></span>
+    </div>
+    <div class="header-badge">
+      <span class="dot-live" id="liveIndicator"></span>
+      <span id="liveText">LIVE</span>
+    </div>
+  </header>
+
+  <!-- ── Main layout ── -->
+  <main class="app-layout">
+
+    <!-- ── Video panel ── -->
+    <section class="video-panel" aria-label="Camera feed">
+      <div class="video-wrapper" id="videoWrapper">
+        <img id="videoFeed"
+             src="/video_feed"
+             alt="Live camera feed with face filter applied"
+             draggable="false" />
+
+        <!-- recording overlay badge -->
+        <div class="rec-badge" id="recBadge" hidden>
+          <span class="rec-dot"></span>
+          <span class="rec-label">REC</span>
+        </div>
+
+        <!-- active filter label -->
+        <div class="active-filter-label" id="activeFilterLabel">No Filter</div>
+
+        <!-- corner HUD decorations -->
+        <div class="hud-corner hud-tl"></div>
+        <div class="hud-corner hud-tr"></div>
+        <div class="hud-corner hud-bl"></div>
+        <div class="hud-corner hud-br"></div>
+      </div>
+
+      <!-- action buttons below video -->
+      <div class="action-row">
+        <button class="action-btn capture-btn" id="captureBtn" title="Capture (Space)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="9"/>
+            <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>Capture</span>
+          <kbd>Space</kbd>
+        </button>
+
+        <button class="action-btn record-btn" id="recordBtn" title="Record (R)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="9"/>
+            <rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" stroke="none" id="recIcon"/>
+          </svg>
+          <span id="recordLabel">Record</span>
+          <kbd>R</kbd>
+        </button>
+
+        <button class="action-btn reset-btn" id="resetBtn" title="No filter (Esc)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+          <span>Reset</span>
+          <kbd>Esc</kbd>
+        </button>
+      </div>
+    </section>
+
+    <!-- ── Filter sidebar ── -->
+    <aside class="filter-sidebar" aria-label="Filter selection">
+      <div class="sidebar-header">
+        <h1>Choose Filter</h1>
+        <p class="sidebar-sub">10 real-time AI effects</p>
+      </div>
+
+      <div class="filter-grid" id="filterGrid" role="list">
+
+        <button class="filter-btn active" data-filter="none" id="filterNone" role="listitem" aria-label="No filter, shortcut Esc">
+          <span class="filter-emoji">🚫</span>
+          <span class="filter-name">None</span>
+          <kbd class="filter-key">Esc</kbd>
+        </button>
+
+        <button class="filter-btn" data-filter="dog" id="filterDog" role="listitem" aria-label="Dog filter, shortcut 1">
+          <span class="filter-emoji">🐶</span>
+          <span class="filter-name">Dog</span>
+          <kbd class="filter-key">1</kbd>
+        </button>
+
+        <button class="filter-btn" data-filter="sunglasses" id="filterSunglasses" role="listitem" aria-label="Sunglasses filter, shortcut 2">
+          <span class="filter-emoji">🕶️</span>
+          <span class="filter-name">Sunglasses</span>
+          <kbd class="filter-key">2</kbd>
+        </button>
+
+        <button class="filter-btn" data-filter="crown" id="filterCrown" role="listitem" aria-label="Crown filter, shortcut 3">
+          <span class="filter-emoji">👑</span>
+          <span class="filter-name">Crown</span>
+          <kbd class="filter-key">3</kbd>
+        </button>
+
+        <button class="filter-btn" data-filter="rainbow" id="filterRainbow" role="listitem" aria-label="Rainbow filter, shortcut 4">
+          <span class="filter-emoji">🌈</span>
+          <span class="filter-name">Rainbow</span>
+          <kbd class="filter-key">4</kbd>
+        </button>
+
+        <button class="filter-btn" data-filter="neon" id="filterNeon" role="listitem" aria-label="Neon filter, shortcut 5">
+          <span class="filter-emoji">⚡</span>
+          <span class="filter-name">Neon</span>
+          <kbd class="filter-key">5</kbd>
+        </button>
+
+        <button class="filter-btn" data-filter="vintage" id="filterVintage" role="listitem" aria-label="Vintage filter, shortcut 6">
+          <span class="filter-emoji">📷</span>
+          <span class="filter-name">Vintage</span>
+          <kbd class="filter-key">6</kbd>
+        </button>
+
+        <button class="filter-btn" data-filter="cyberpunk" id="filterCyberpunk" role="listitem" aria-label="Cyberpunk filter, shortcut 7">
+          <span class="filter-emoji">🤖</span>
+          <span class="filter-name">Cyberpunk</span>
+          <kbd class="filter-key">7</kbd>
+        </button>
+
+        <button class="filter-btn" data-filter="sketch" id="filterSketch" role="listitem" aria-label="Sketch filter, shortcut 8">
+          <span class="filter-emoji">✏️</span>
+          <span class="filter-name">Sketch</span>
+          <kbd class="filter-key">8</kbd>
+        </button>
+
+        <button class="filter-btn" data-filter="pixelate" id="filterPixelate" role="listitem" aria-label="Pixelate filter, shortcut 9">
+          <span class="filter-emoji">🎮</span>
+          <span class="filter-name">Pixelate</span>
+          <kbd class="filter-key">9</kbd>
+        </button>
+
+        <button class="filter-btn" data-filter="mirror" id="filterMirror" role="listitem" aria-label="Mirror filter, shortcut 0">
+          <span class="filter-emoji">🪞</span>
+          <span class="filter-name">Mirror</span>
+          <kbd class="filter-key">0</kbd>
+        </button>
+
+      </div>
+
+      <!-- keyboard shortcut legend -->
+      <div class="shortcut-panel">
+        <h2 class="shortcut-title">⌨ Keyboard Shortcuts</h2>
+        <div class="shortcut-list">
+          <div class="shortcut-row"><kbd>1–0</kbd><span>Select filter</span></div>
+          <div class="shortcut-row"><kbd>Esc</kbd><span>Remove filter</span></div>
+          <div class="shortcut-row"><kbd>Space</kbd><span>Capture photo</span></div>
+          <div class="shortcut-row"><kbd>R</kbd><span>Start / stop record</span></div>
+        </div>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- ── Photo gallery ── -->
+  <section class="gallery-section" id="gallerySection" aria-label="Captured photos">
+    <h2 class="gallery-title">📸 Captured Gallery</h2>
+    <div class="gallery-strip" id="galleryStrip"></div>
+  </section>
+
+  <!-- ── Toast notification ── -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

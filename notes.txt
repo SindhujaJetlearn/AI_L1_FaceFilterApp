@@ -1,0 +1,59 @@
+Vibe Coding Prompt - FaceFilter Al Web App
+
+Build me a real-time face filter web application called "FaceFilter Al". Use Python with
+Flask as the web server, OpenCV for face detection and filter rendering, and a premium
+dark-themed HTML/CSS/JS frontend. The app should run locally and stream live webcam
+video with filters applied in real time.
+
+Face Detection:
+Use OpenCV's Haar Cascade classifier (haarcascade_frontalface_default.xml) to detect
+faces in each video frame at 30 FPS. Draw a detection rectangle around each detected face.
+The face bounding box coordinates should be passed to each filter function so overlays are
+precisely positioned.
+
+Filters to include (minimum 8):
+
+. Dog: ears overlaid above the face, a nose on the nose tip, a tongue below the mouth,
+whiskers on the cheeks - all drawn with OpenCV shapes
+. Sunglasses: dark rectangular lenses with a thin bridge, positioned over the eyes
+. Crown: golden crown shape drawn above the forehead
+. Rainbow: animated colour arc drawn above the head
+. Neon: glowing edge detection using Canny + colour tinting
+. Vintage: sepia tone, film grain (random noise), and a dark vignette
+. Cyberpunk: semi-transparent HUD overlay with corner brackets and scanlines
+. Sketch: greyscale + inverted blur for a pencil drawing effect
+. Pixelate: divide the face region into a grid of large blocks (8-bit effect)
+. Mirror: split-screen left/right mirror of the face
+
+Photo Capture:
+Pressing the Space key captures the current frame with the active filter and downloads it
+as a PNG file.
+
+Video Recording:
+Pressing R starts recording the live filtered video stream using the browser's
+MediaRecorder API. Pressing R again stops recording and downloads the result as a WebM
+file.
+
+Frontend Design:
+
+. Ultra-dark background (#Oa0aOf) with purple and cyan neon accents
+. Glassmorphism filter selector panel with blur effects
+. Filter buttons in a responsive grid, each with an emoji icon and label
+. Keyboard shortcut overlay (1-9, 0, -, Space, R, Esc)
+. Live recording indicator (red pulsing dot) when video recording is active
+
+File Structure:
+
+. app.py- Flask server, MJPEG stream endpoint, frame processing pipeline
+. filters.py- one function per filter, each takes a frame + face coordinates and returns
+the modified frame
+. templates/index.html -frontend HTML
+. static/style.css - glassmorphism design system
+. static/app.js - filter switching, keyboard shortcuts, capture, recording, gallery
+. requirements.txt - Flask, opencv-python, numpy
+
+Technical requirements:
+
+. Runs locally with python app.py -> http://localhost:5000
+. No login, no database, no cloud dependency
+. Deployable to Render.com for a public URL
